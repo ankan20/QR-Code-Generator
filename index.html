@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
     <title>QR Code Generator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -36,14 +36,18 @@
                 }, 1000);
             }
         }
-        //for dawnload the QR in device
+
         function downloadQR() {
-            html2canvas(qrImage).then(canvas => {
-                const link = document.createElement("a");
-                link.href = canvas.toDataURL("image/png");
-                link.download = "qr_code.png";
-                link.click();
-            });
+            if (qrImage.src) {
+                fetch(qrImage.src)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = "qr_code.png";
+                        link.click();
+                    });
+            }
         }
     </script>
 </body>
